@@ -8,7 +8,6 @@ import chess.ReturnPlay.Message;
 public class Knight {
 	public static Message IsMoveValid(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) 
     {
-        
         if(Chess.PieceInBoard(mov_file, mov_rank) == false)
         {
             return Message.ILLEGAL_MOVE;
@@ -18,10 +17,10 @@ public class Knight {
 		PieceFile left_file_bound2 = null;
 		PieceFile right_file_bound1 = null;
 		PieceFile right_file_bound2 = null;
-        int top_rank_bound1 = cur_rank + 1;
-		int top_rank_bound2 = cur_rank + 2;
-		int bot_rank_bound1 = cur_rank - 1;
-		int bot_rank_bound2 = cur_rank - 2;
+        int top_rank_bound1 = 0;
+		int top_rank_bound2 = 0;
+		int bot_rank_bound1 = 0;
+		int bot_rank_bound2 = 0;
 
         if(cur_file.ordinal() - 1 >= 0)
 		{
@@ -33,78 +32,94 @@ public class Knight {
 		}
         if(cur_file.ordinal() - 2 >= 0)
 		{
-			left_file_bound1 = PieceFile.values()[cur_file.ordinal() - 1];
+			left_file_bound2 = PieceFile.values()[cur_file.ordinal() - 2];
 		}
 		if(cur_file.ordinal() + 2 <= 7)
 		{
-			right_file_bound1 = PieceFile.values()[cur_file.ordinal() + 1];
+			right_file_bound2 = PieceFile.values()[cur_file.ordinal() + 2];
 		}
+        if(cur_rank + 1 < 8)
+        {
+            top_rank_bound1 = cur_rank + 1;
+        }
+        if(cur_rank + 2 < 8)
+        {
+            top_rank_bound2 = cur_rank + 2;
+        }
+        if(cur_rank - 1 > 0)
+        {
+            bot_rank_bound1 = cur_rank - 1;
+        }
+        if(cur_rank - 2 > 0)
+        {
+            bot_rank_bound2 = cur_rank - 2;
+        }
         
 		if (piece_type == PieceType.WN) {
-			if (Path.IsVacant(left_file_bound1, top_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (Path.IsVacant(left_file_bound2, top_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(left_file_bound2, bot_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(left_file_bound1, bot_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound1, top_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound2, top_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound2, bot_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound1, bot_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
 		} 
         else if (piece_type == PieceType.BN) 
         {
-			if (Path.IsVacant(left_file_bound1, top_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (Path.IsVacant(left_file_bound2, top_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(left_file_bound2, bot_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(left_file_bound1, bot_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound1, top_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound2, top_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound2, bot_rank_bound1) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (Path.IsVacant(right_file_bound1, bot_rank_bound2) && IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
@@ -115,6 +130,11 @@ public class Knight {
 
     public static boolean IsAppropriatePiece(PieceType piece_name, PieceFile file, int rank, PieceFile file_bound, int rank_bound)
     {
+        if(file_bound == null || rank_bound == 0)
+        {
+            return false;
+        }
+
         for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
         {
             if(rp.pieceFile == file && rp.pieceRank == rank)
@@ -137,6 +157,21 @@ public class Knight {
                 }
             }
         }
+        return false;
+    }
+
+    public static boolean IsValidPosition(PieceFile file, int rank, PieceFile file_bound, int rank_bound)
+    {
+        if(file_bound == null || rank_bound == 0)
+        {
+            return false;
+        }
+
+        if(file == file_bound && rank == rank_bound)
+        {
+            return true;
+        }
+
         return false;
     }
 }

@@ -138,6 +138,10 @@ public class Chess {
 				{
 					return_play.message = Rook.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
 				}
+				else if(rp.pieceType == PieceType.WN || rp.pieceType == PieceType.WN)
+				{
+					return_play.message = Knight.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
+				}
 				if ((rp.pieceType == PieceType.WK && is_wk_moved == false)
 						|| (rp.pieceType == PieceType.BK && is_bk_moved == false)) {
 					if (Castling.isCastling(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file,
