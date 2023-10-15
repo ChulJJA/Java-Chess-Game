@@ -1,99 +1,73 @@
 package chess;
 
-import java.util.function.BiPredicate;
+import chess.ReturnPiece.PieceFile;
+import chess.ReturnPiece.PieceType;
 
 public interface Path {
+	default boolean isPathClear(PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
+		int cur_file_val = cur_file.ordinal();
+		int mov_file_val = mov_file.ordinal();
 
-	/**
-	 * Predicate to test cell state on board
-	 */
-    Chess.return_play.piecesOnBoard.contains()
-	BiPredicate<Character, Integer> position = (c,
-			i) -> (Chess.activeBoard.getCell(c, i).equals("##") || Chess.activeBoard.getCell(c, i).equals("  "));
-	/**
-	 * Predicate to test if piece is rook or queen for proper movement
-	 */
-	BiPredicate<Character, Integer> rookOrQueen = (c,
-			i) -> (Chess.activeBoard.getCell(c, i).equals("wR") || Chess.activeBoard.getCell(c, i).equals("bR")
-					|| Chess.activeBoard.getCell(c, i).equals("wQ") || Chess.activeBoard.getCell(c, i).equals("bQ"));
-	/**
-	 * Predicate to test if piece is bishop or queen for proper movement
-	 */
-	BiPredicate<Character, Integer> bishopOrQueen = (c,
-			i) -> (Chess.activeBoard.getCell(c, i).equals("wB") || Chess.activeBoard.getCell(c, i).equals("bB")
-					|| Chess.activeBoard.getCell(c, i).equals("wQ") || Chess.activeBoard.getCell(c, i).equals("bQ"));
-    
-
-	default boolean isPathClear(char curCol, int curRow, char intCol, int intRow) {
-		int valOfCurCol = Character.valueOf(curCol) - 97;
-		int valOfIntCol = Character.valueOf(intCol) - 97;
-
-		if (rookOrQueen.test(curCol, curRow)) {
-			if (curCol == intCol) {
-				// moving up or down
-				if (intRow < curRow) {
-					for (int i = curRow - 1; i > intRow; i--) {
-						if (!position.test(curCol, i))
+		if (IsRookOrQueen(cur_file, cur_rank)) {
+			if (cur_file == mov_file) {
+				if (mov_rank < cur_rank) {
+					for (int i = cur_rank - 1; i > mov_rank; i--) {
+						if (!IsVacant(cur_file, i))
 							return false;
 					}
 					return true;
-				}
-				if (intRow > curRow) {
-					for (int i = curRow + 1; i < intRow; i++) {
-						if (!position.test(curCol, i))
+				}D
+				if (mov_rank > cur_rank) {
+					for (int i = cur_rank + 1; i < mov_rank; i++) {
+						if (!IsVacant(cur_file, i))
 							return false;
 					}
 					return true;
 				}
 			}
-			if (curRow == intRow) {
-				// moving left or right
-				if (intCol < curCol) {
-					for (int i = valOfCurCol - 1; i > valOfIntCol; i--) {
-						if (!position.test((char) (i + 97), curRow))
+			if (cur_rank == mov_rank) {
+				if (mov_file_val < cur_file_val) {
+					for (int i = cur_file_val - 1; i > mov_file_val; i--) {
+						if (!IsVacant(PieceFile.values()[i], cur_rank))
 							return false;
 					}
 					return true;
 				}
-				if (intCol > curCol) {
-					for (int i = valOfCurCol + 1; i < valOfIntCol; i++) {
-						if (!position.test((char) (i + 97), curRow))
+				if (mov_file_val > cur_file_val) {
+					for (int i = cur_file_val + 1; i < mov_file_val; i++) {
+						if (!IsVacant(PieceFile.values()[i], cur_rank))
 							return false;
 					}
 					return true;
 				}
 			}
 		}
-		if (bishopOrQueen.test(curCol, curRow)) {
-			if (isDiagonal(curCol, curRow, intCol, intRow)) {
-				// diagonals top left
-				if (intCol < curCol && intRow > curRow) {
-					for (int i = curRow + 1; i < intRow; i++) {
-						if (!position.test(--curCol, i))
+		if (IsBishopOrQueen(cur_file, cur_rank)) {
+			if (isDiagonal(cur_file, cur_rank, mov_file, mov_rank)) {
+				if (mov_file_val < cur_file_val && mov_rank > cur_rank) {
+					for (int i = cur_rank + 1; i < mov_rank; i++) {
+						if (!IsVacant(PieceFile.values()[--cur_file_val], i))
 							return false;
 					}
 					return true;
 				}
-				// top right
-				if (intCol > curCol && intRow > curRow) {
-					for (int i = curRow + 1; i < intRow; i++) {
-						if (!position.test(++curCol, i))
+				if (mov_file_val > cur_file_val && mov_rank > cur_rank) {
+					for (int i = cur_rank + 1; i < mov_rank; i++) {
+						if (!IsVacant(PieceFile.values()[++cur_file_val], i))
 							return false;
 					}
 					return true;
 				}
-				// bottom left
-				if (intCol < curCol && intRow < curRow) {
-					for (int i = curRow - 1; i > intRow; i--) {
-						if (!position.test(--curCol, i))
+				if (mov_file_val < cur_file_val && mov_rank < cur_rank) {
+					for (int i = cur_rank - 1; i > mov_rank; i--) {
+						if (!IsVacant(PieceFile.values()[--cur_file_val], i))
 							return false;
 					}
 					return true;
 				}
-				// bottom right
-				if (intCol > curCol && intRow < curRow) {
-					for (int i = curRow - 1; i > intRow; i--) {
-						if (!position.test(++curCol, i))
+				if (mov_file_val > cur_file_val && mov_rank < cur_rank) {
+					for (int i = cur_rank - 1; i > mov_rank; i--) {
+						if (!IsVacant(PieceFile.values()[++cur_file_val], i))
 							return false;
 					}
 					return true;
@@ -103,53 +77,79 @@ public interface Path {
 		return false;
 	}
 
-	/**
-	 * Method to determine if the intended move is a diagonal move which would be a
-	 * valid move and invalid otherwise
-	 * 
-	 * @param curCol Current Col of the piece being moved
-	 * @param curRow Current Row of the piece being moved
-	 * @param intCol Intended Col of the piece being moved
-	 * @param intRow Intended Row of the piece being moved
-	 * @return Returns true of false depending on whether the intended position is
-	 *         indeed a diagonal position from the current position
-	 */
-	private boolean isDiagonal(char curCol, int curRow, char intCol, int intRow) {
-		int rowDist;
-		int colDist;
-		int valOfCurCol = Character.valueOf(curCol) - 97;
-		int valOfIntCol = Character.valueOf(intCol) - 97;
-		// diagonal top left
-		if (intCol < curCol && intRow > curRow) {
-			rowDist = intRow - curRow;
-			colDist = valOfCurCol - valOfIntCol;
-			if (rowDist == colDist)
+	private boolean isDiagonal(PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
+		int file_dist;
+        int rank_dist;
+		int cur_file_val = cur_file.ordinal();
+		int mov_file_val = mov_file.ordinal();
+        
+		if (mov_file_val < cur_file_val && mov_rank > cur_rank) {
+			rank_dist = mov_rank - cur_rank;
+			file_dist = cur_file_val - mov_file_val;
+			if (rank_dist == file_dist)
 				return true;
 		}
-		// diagonal top right
-		if (intCol > curCol && intRow > curRow) {
-			rowDist = intRow - curRow;
-			colDist = valOfIntCol - valOfCurCol;
-			if (rowDist == colDist)
+		if (mov_file_val > cur_file_val && mov_rank > cur_rank) {
+			rank_dist = mov_rank - cur_rank;
+			file_dist = mov_file_val - cur_file_val;
+			if (rank_dist == file_dist)
 				return true;
 
 		}
-		// diagonal bottom left
-		if (intCol < curCol && intRow < curRow) {
-			rowDist = curRow - intRow;
-			colDist = valOfCurCol - valOfIntCol;
-			if (rowDist == colDist)
+		if (mov_file_val < cur_file_val && mov_rank < cur_rank) {
+			rank_dist = cur_rank - mov_rank;
+			file_dist = cur_file_val - mov_file_val;
+			if (rank_dist == file_dist)
 				return true;
 
 		}
-		// diagonal bottom right
-		if (intCol > curCol && intRow < curRow) {
-			rowDist = curRow - intRow;
-			colDist = valOfIntCol - valOfCurCol;
-			if (rowDist == colDist)
+		if (mov_file_val > cur_file_val && mov_rank < cur_rank) {
+			rank_dist = cur_rank - mov_rank;
+			file_dist = mov_file_val - cur_file_val;
+			if (rank_dist == file_dist)
 				return true;
 
 		}
 		return false;
 	}
+
+    private boolean IsVacant(PieceFile file, int rank)
+    {
+        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
+        {
+            if(rp.pieceFile == file && rp.pieceRank == rank)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean IsRookOrQueen(PieceFile file, int rank)
+    {
+        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
+        {
+            if(rp.pieceFile == file && rp.pieceRank == rank)
+            {
+                if(rp.pieceType == PieceType.WR || rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BR || rp.pieceType == PieceType.BQ)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean IsBishopOrQueen(PieceFile file, int rank)
+    {
+        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
+        {
+            if(rp.pieceFile == file && rp.pieceRank == rank)
+            {
+                if(rp.pieceType == PieceType.WB || rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BB || rp.pieceType == PieceType.BQ)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
