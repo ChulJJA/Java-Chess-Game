@@ -85,12 +85,10 @@ public class Chess {
 			if (current_player == Player.white) 
 			{
 				return_play.message = ReturnPlay.Message.RESIGN_BLACK_WINS;
-				System.out.println("\n White resigns. Black wins.");
 			} 
 			else 
 			{
 				return_play.message = ReturnPlay.Message.RESIGN_WHITE_WINS;
-				System.out.println("\n Black resigns. White wins.");
 			}
 			return return_play;
 		}
@@ -107,27 +105,14 @@ public class Chess {
 				if(rp.pieceType == PieceType.WP || rp.pieceType == PieceType.BP)
 				{
 					return_play.message = Pawn.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
-				}
-				else if(rp.pieceType == PieceType.WB || rp.pieceType == PieceType.BB)
-				{
-					return_play.message = Pawn.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
-					return return_play;
-				}
-				if ((rp.pieceType == PieceType.WK && is_wk_moved == false)
-						|| (rp.pieceType == PieceType.BK && is_bk_moved == false)) {
-					if (Castling.isCastling(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file,
-							move_piece_rank, return_play.piecesOnBoard) == true) {
-					}
-				} 
-				else if (rp.pieceType == PieceType.WP || rp.pieceType == PieceType.BP) 
-				{
-					if (Promotion.isPromotion(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file,
-							move_piece_rank, return_play.piecesOnBoard) == true) {
+
+					if (Pawn.CheckForPromotion(rp.pieceType, current_piece_rank)) 
+					{
 						if (move.length() == 4) 
 						{
 							rp.pieceType = PieceType.WQ;
 						} 
-						else if (move.charAt(5) == 'N') 
+						else if (move.charAt(6) == 'N') 
 						{
 							rp.pieceType = PieceType.WN;
 						} 
@@ -145,33 +130,50 @@ public class Chess {
 						}
 					}
 				}
-				rp.pieceFile = move_piece_file;
-				rp.pieceRank = move_piece_rank;
-				break;
+				else if(rp.pieceType == PieceType.WB || rp.pieceType == PieceType.BB)
+				{
+					return_play.message = Bishop.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
+				}
+				else if(rp.pieceType == PieceType.WR || rp.pieceType == PieceType.BR)
+				{
+					return_play.message = Rook.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
+				}
+				if ((rp.pieceType == PieceType.WK && is_wk_moved == false)
+						|| (rp.pieceType == PieceType.BK && is_bk_moved == false)) {
+					if (Castling.isCastling(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file,
+							move_piece_rank, return_play.piecesOnBoard) == true) {
+					}
+				} 
+				if(return_play.message == null)
+				{
+					rp.pieceFile = move_piece_file;
+					rp.pieceRank = move_piece_rank;
+					break;				
+				}
 			}
 		}
 
 		if (move.length() > 5 && move.substring(6, 11).equals("draw?")) {
 			if (current_player == Player.white) 
 			{
-				System.out.println("\n White offers a draw.");
 				return_play.message = ReturnPlay.Message.DRAW;
 			} 
 			else 
 			{
 				return_play.message = ReturnPlay.Message.DRAW;
-				System.out.println("\n Black offers a draw.");
 			}
 				return return_play;
 		}
 
-		if (current_player == Player.white) {
+		if (current_player == Player.white) 
+		{
 			current_player = Player.black;
-		} else {
+		} 
+		else 
+		{
 			current_player = Player.white;
 		}
 
-		return_play.message = null;
 		return return_play;
 	}
 
@@ -368,7 +370,7 @@ public class Chess {
 
 	public static boolean PieceInBoard(PieceFile mov_file, int mov_rank) 
 	{
-		if (mov_file.ordinal() < 0 || mov_file.ordinal() > 7 || mov_rank < 0 || mov_rank > 7) 
+		if (mov_file.ordinal() < 0 || mov_file.ordinal() > 7 || mov_rank < 1 || mov_rank > 8) 
 		{
 			return false;
 		}

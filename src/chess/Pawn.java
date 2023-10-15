@@ -2,56 +2,66 @@ package chess;
 
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
+import chess.ReturnPlay.Message;
+
 
 public class Pawn {
 	private boolean enPassant = false;
 	private int numOfEnPassantTurns = 0;
 
-	public static ReturnPlay.Message IsMoveValid(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) 
+	public static Message IsMoveValid(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) 
 	{
 		if(Chess.PieceInBoard(mov_file, mov_rank) == false)
 		{
-			return ReturnPlay.Message.ILLEGAL_MOVE;
+			return Message.ILLEGAL_MOVE;
 		}
 
-		PieceFile left_file_bound = PieceFile.values()[cur_file.ordinal() - 1];
-		PieceFile right_file_bound = PieceFile.values()[cur_file.ordinal() + 1];
+		PieceFile left_file_bound = null;
+		PieceFile right_file_bound = null;
+
+		if(cur_file.ordinal() - 1 >= 0)
+		{
+			left_file_bound = PieceFile.values()[cur_file.ordinal() - 1];
+		}
+		if(cur_file.ordinal() + 1 <= 7)
+		{
+			right_file_bound = PieceFile.values()[cur_file.ordinal() + 1];
+		}
 		int top_rank_bound = cur_rank + 1;
 		int bottom_rank_bound = cur_rank - 1;
-
-		if (IsEnpassantValid(mov_file, mov_rank))
-		{
-			return null;
-		}
 
 		if (piece_type == PieceType.WP) 
 		{
 			for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
 			{
-				if(cur_file == mov_file)
+				if(Path.IsVacant(mov_file, mov_rank))
 				{
-					if(cur_rank + 2 == cur_rank && cur_rank != 1)
+					if(cur_file == mov_file && cur_rank + 1 == mov_rank)
 					{
-						return ReturnPlay.Message.ILLEGAL_MOVE;
-					}
-					if(rp.pieceFile == mov_file && rp.pieceRank == mov_rank)
-					{
-						return ReturnPlay.Message.ILLEGAL_MOVE;
+						return null;
 					}
 				}
-
+				if(cur_rank == 2 && Path.IsVacant(mov_file, mov_rank))
+				{
+					if(cur_file == mov_file && cur_rank + 2 == mov_rank)
+					{
+						return null;
+					}
+				}
 				if(rp.pieceFile == right_file_bound && rp.pieceRank == top_rank_bound)
 				{
-					if(rp.pieceType.toString().contains("b"))
+					if(mov_file == right_file_bound && mov_rank == top_rank_bound && rp.pieceType.toString().startsWith("B"))
 					{
 						Chess.return_play.piecesOnBoard.remove(rp);
+						return null;
 					}
 				}
-				else if(rp.pieceFile == left_file_bound && rp.pieceRank == top_rank_bound)
+				if(rp.pieceFile == left_file_bound && rp.pieceRank == top_rank_bound)
 				{
-					if(rp.pieceType.toString().contains("b"))
+					if(mov_file == left_file_bound && mov_rank == top_rank_bound && rp.pieceType.toString().startsWith("B"))
 					{
 						Chess.return_play.piecesOnBoard.remove(rp);
+						return null;
 					}
 				}
 			}
@@ -60,118 +70,43 @@ public class Pawn {
 		{
 			for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
 			{
-				if(cur_file == mov_file)
+				if(Path.IsVacant(mov_file, mov_rank))
 				{
-					if(cur_rank + 2 == cur_rank && cur_rank != 7)
+					if(cur_file == mov_file && cur_rank - 1 == mov_rank)
 					{
-						return ReturnPlay.Message.ILLEGAL_MOVE;
-					}
-					if(rp.pieceFile == mov_file && rp.pieceRank == mov_rank)
-					{
-						return ReturnPlay.Message.ILLEGAL_MOVE;
+						return null;
 					}
 				}
-
+				if(cur_rank == 7 && Path.IsVacant(mov_file, mov_rank))
+				{
+					if(cur_file == mov_file && cur_rank - 2 == mov_rank)
+					{
+						return null;
+					}
+				}
 				if(rp.pieceFile == right_file_bound && rp.pieceRank == bottom_rank_bound)
 				{
-					if(rp.pieceType.toString().contains("w"))
+					if(mov_file == right_file_bound && mov_rank == bottom_rank_bound && rp.pieceType.toString().startsWith("W"))
 					{
 						Chess.return_play.piecesOnBoard.remove(rp);
+						return null;
 					}
 				}
-				else if(rp.pieceFile == left_file_bound && rp.pieceRank == bottom_rank_bound)
+				if(rp.pieceFile == left_file_bound && rp.pieceRank == bottom_rank_bound)
 				{
-					if(rp.pieceType.toString().contains("w"))
+					if(mov_file == left_file_bound && mov_rank == bottom_rank_bound && rp.pieceType.toString().startsWith("W"))
 					{
 						Chess.return_play.piecesOnBoard.remove(rp);
+						return null;
 					}
 				}
 			}
 		}
 			
-
-
-		return null;
+		return Message.ILLEGAL_MOVE;
 	}
 
-	 public static boolean IsEnpassantValid(PieceFile mov_file, int mov_rank) 
-	 {
-	// 	PieceFile left_file = PieceFile.values()[mov_file.ordinal() - 1];
-	// 	PieceFile right_file = PieceFile.values()[mov_file.ordinal() + 1];
-	// 	ReturnPiece mov_piece;
-
-	// 	if (GetPieceType() ==  PieceType.WP) {
-	// 		if (left_file.toString().charAt(0) - 1 >= 'a') 
-	// 		{
-	// 			for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
-	// 			{
-	// 				if((rp.pieceFile == left_file && rp.pieceRank == GetPieceRank()) instanceof Pawn)
-	// 				{
-
-	// 				}
-	// 			}
-	// 			if (Chess.activeBoard.getChessPiece(left_file, GetPieceRank()) instanceof Pawn) {
-	// 				if (((Pawn) Chess.activeBoard.getChessPiece(leftCol, getRow())).IsEnPassant()) {
-	// 					if (Chess.activeBoard.getCell(leftCol, getRow()).contains("b")) {
-	// 						if (mov_file == leftCol && mov_rank == getRow() + 1) {
-	// 							Chess.activeBoard.getChessPieces()
-	// 									.remove(Chess.activeBoard.getChessPiece(leftCol, getRow()));
-	// 							Chess.activeBoard.initStateOfBoard();
-	// 							return true;
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 		if (++rightCol <= 'h') {
-	// 			if (Chess.activeBoard.getChessPiece(rightCol, getRow()) instanceof Pawn) {
-	// 				if (((Pawn) Chess.activeBoard.getChessPiece(rightCol, getRow())).IsEnPassant()) {
-	// 					if (Chess.activeBoard.getCell(rightCol, getRow()).contains("b")) {
-	// 						if (mov_file == rightCol && mov_rank == getRow() + 1) {
-	// 							Chess.activeBoard.getChessPieces()
-	// 									.remove(Chess.activeBoard.getChessPiece(rightCol, getRow()));
-	// 							Chess.activeBoard.initStateOfBoard();
-	// 							return true;
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	if (getChessPieceName().equals("bp")) {
-	// 		if (--leftCol >= 'a') {
-	// 			if (Chess.activeBoard.getChessPiece(leftCol, getRow()) instanceof Pawn) {
-	// 				if (((Pawn) Chess.activeBoard.getChessPiece(leftCol, getRow())).IsEnPassant()) {
-	// 					if (Chess.activeBoard.getCell(leftCol, getRow()).contains("w")) {
-	// 						if (mov_file == leftCol && mov_rank == getRow() - 1) {
-	// 							Chess.activeBoard.getChessPieces()
-	// 									.remove(Chess.activeBoard.getChessPiece(leftCol, getRow()));
-	// 							Chess.activeBoard.initStateOfBoard();
-	// 							return true;
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 		if (++rightCol <= 'h') {
-	// 			if (Chess.activeBoard.getChessPiece(rightCol, getRow()) instanceof Pawn) {
-	// 				if (((Pawn) Chess.activeBoard.getChessPiece(rightCol, getRow())).IsEnPassant()) {
-	// 					if (Chess.activeBoard.getCell(rightCol, getRow()).contains("w")) {
-	// 						if (mov_file == rightCol && mov_rank == getRow() - 1) {
-	// 							Chess.activeBoard.getChessPieces()
-	// 									.remove(Chess.activeBoard.getChessPiece(rightCol, getRow()));
-	// 							Chess.activeBoard.initStateOfBoard();
-	// 							return true;
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	 	return false;
-	 }
-
-	public boolean CheckForPromotion(int cur_rank, PieceType piece_type) 
+	public static boolean CheckForPromotion(PieceType piece_type, int cur_rank) 
 	{
 		if (piece_type == PieceType.WP) 
 		{

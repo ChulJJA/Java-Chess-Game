@@ -3,8 +3,8 @@ package chess;
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
 
-public interface Path {
-	default boolean isPathClear(PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
+public class Path {
+	static boolean IsPathClear(PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
 		int cur_file_val = cur_file.ordinal();
 		int mov_file_val = mov_file.ordinal();
 
@@ -12,14 +12,14 @@ public interface Path {
 			if (cur_file == mov_file) {
 				if (mov_rank < cur_rank) {
 					for (int i = cur_rank - 1; i > mov_rank; i--) {
-						if (!IsVacant(cur_file, i))
+						if (IsVacant(cur_file, i) == false)
 							return false;
 					}
 					return true;
-				}D
+				}
 				if (mov_rank > cur_rank) {
 					for (int i = cur_rank + 1; i < mov_rank; i++) {
-						if (!IsVacant(cur_file, i))
+						if (IsVacant(cur_file, i) == false)
 							return false;
 					}
 					return true;
@@ -28,14 +28,14 @@ public interface Path {
 			if (cur_rank == mov_rank) {
 				if (mov_file_val < cur_file_val) {
 					for (int i = cur_file_val - 1; i > mov_file_val; i--) {
-						if (!IsVacant(PieceFile.values()[i], cur_rank))
+						if (IsVacant(PieceFile.values()[i], cur_rank) == false)
 							return false;
 					}
 					return true;
 				}
 				if (mov_file_val > cur_file_val) {
 					for (int i = cur_file_val + 1; i < mov_file_val; i++) {
-						if (!IsVacant(PieceFile.values()[i], cur_rank))
+						if (IsVacant(PieceFile.values()[i], cur_rank) == false)
 							return false;
 					}
 					return true;
@@ -43,31 +43,31 @@ public interface Path {
 			}
 		}
 		if (IsBishopOrQueen(cur_file, cur_rank)) {
-			if (isDiagonal(cur_file, cur_rank, mov_file, mov_rank)) {
+			if (IsDiagonal(cur_file, cur_rank, mov_file, mov_rank)) {
 				if (mov_file_val < cur_file_val && mov_rank > cur_rank) {
 					for (int i = cur_rank + 1; i < mov_rank; i++) {
-						if (!IsVacant(PieceFile.values()[--cur_file_val], i))
+						if (IsVacant(PieceFile.values()[--cur_file_val], i) == false)
 							return false;
 					}
 					return true;
 				}
 				if (mov_file_val > cur_file_val && mov_rank > cur_rank) {
 					for (int i = cur_rank + 1; i < mov_rank; i++) {
-						if (!IsVacant(PieceFile.values()[++cur_file_val], i))
+						if (IsVacant(PieceFile.values()[++cur_file_val], i) == false)
 							return false;
 					}
 					return true;
 				}
 				if (mov_file_val < cur_file_val && mov_rank < cur_rank) {
 					for (int i = cur_rank - 1; i > mov_rank; i--) {
-						if (!IsVacant(PieceFile.values()[--cur_file_val], i))
+						if (IsVacant(PieceFile.values()[--cur_file_val], i) == false)
 							return false;
 					}
 					return true;
 				}
 				if (mov_file_val > cur_file_val && mov_rank < cur_rank) {
 					for (int i = cur_rank - 1; i > mov_rank; i--) {
-						if (!IsVacant(PieceFile.values()[++cur_file_val], i))
+						if (IsVacant(PieceFile.values()[++cur_file_val], i) == false)
 							return false;
 					}
 					return true;
@@ -77,7 +77,7 @@ public interface Path {
 		return false;
 	}
 
-	private boolean isDiagonal(PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
+	private static boolean IsDiagonal(PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
 		int file_dist;
         int rank_dist;
 		int cur_file_val = cur_file.ordinal();
@@ -113,7 +113,7 @@ public interface Path {
 		return false;
 	}
 
-    private boolean IsVacant(PieceFile file, int rank)
+    public static boolean IsVacant(PieceFile file, int rank)
     {
         for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
         {
@@ -124,7 +124,7 @@ public interface Path {
         }
         return true;
     }
-    private boolean IsRookOrQueen(PieceFile file, int rank)
+    private static boolean IsRookOrQueen(PieceFile file, int rank)
     {
         for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
         {
@@ -138,7 +138,7 @@ public interface Path {
         }
         return false;
     }
-    private boolean IsBishopOrQueen(PieceFile file, int rank)
+    private static boolean IsBishopOrQueen(PieceFile file, int rank)
     {
         for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
         {
