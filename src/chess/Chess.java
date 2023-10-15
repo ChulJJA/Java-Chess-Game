@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
+import chess.ReturnPlay.Message;
 
 class ReturnPiece {
 	static enum PieceType {
@@ -80,6 +81,12 @@ public class Chess {
 
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
+		return_play.message = ReturnPlay.Message.ILLEGAL_MOVE;
+		if(move.length() < 4)
+		{
+			return return_play;
+		}
+
 		if (move.equals("resign")) 
 		{
 			if (current_player == Player.white) 
@@ -104,7 +111,7 @@ public class Chess {
 			{
 				if(rp.pieceType == PieceType.WP || rp.pieceType == PieceType.BP)
 				{
-					return_play.message = Pawn.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
+					return_play.message = Pawn.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 
 					if (Pawn.CheckForPromotion(rp.pieceType, current_piece_rank)) 
 					{
@@ -132,16 +139,21 @@ public class Chess {
 				}
 				else if(rp.pieceType == PieceType.WB || rp.pieceType == PieceType.BB)
 				{
-					return_play.message = Bishop.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
+					return_play.message = Bishop.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 				}
 				else if(rp.pieceType == PieceType.WR || rp.pieceType == PieceType.BR)
 				{
-					return_play.message = Rook.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
+					return_play.message = Rook.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 				}
-				else if(rp.pieceType == PieceType.WN || rp.pieceType == PieceType.WN)
+				else if(rp.pieceType == PieceType.WN || rp.pieceType == PieceType.BN)
 				{
-					return_play.message = Knight.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank );
+					return_play.message = Knight.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 				}
+				else if(rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BQ)
+				{
+					return_play.message = Queen.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
+				}
+			
 				if ((rp.pieceType == PieceType.WK && is_wk_moved == false)
 						|| (rp.pieceType == PieceType.BK && is_bk_moved == false)) {
 					if (Castling.isCastling(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file,

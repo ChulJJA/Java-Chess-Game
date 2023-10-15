@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.function.BiPredicate;
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
 import chess.ReturnPlay.Message;
