@@ -37,11 +37,11 @@ public class Knight {
 		{
 			right_file_bound2 = PieceFile.values()[cur_file.ordinal() + 2];
 		}
-        if(cur_rank + 1 < 8)
+        if(cur_rank + 1 < 9)
         {
             top_rank_bound1 = cur_rank + 1;
         }
-        if(cur_rank + 2 < 8)
+        if(cur_rank + 2 < 9)
         {
             top_rank_bound2 = cur_rank + 2;
         }
@@ -54,71 +54,72 @@ public class Knight {
             bot_rank_bound2 = cur_rank - 2;
         }
         
-		if (piece_type == PieceType.WN) {
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, top_rank_bound2))
+		if (piece_type == PieceType.WN) 
+        {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, top_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
 		} 
         else if (piece_type == PieceType.BN) 
         {
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, top_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, top_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound1, top_rank_bound2))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, top_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound2, top_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1) || IsValidPosition(mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound2, bot_rank_bound1))
             {
 				return null;
             }
-			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2) || IsValidPosition(mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound1, bot_rank_bound2))
             {
 				return null;
             }
@@ -140,7 +141,7 @@ public class Knight {
             {
                 if(piece_name == PieceType.WN)
                 {
-                    if((rp.pieceType.toString().startsWith("B")) || (file == file_bound && rank == rank_bound))
+                    if((rp.pieceType.toString().startsWith("B")) && (file == file_bound && rank == rank_bound))
                     {
                         Chess.return_play.piecesOnBoard.remove(rp);
                         return true;
@@ -148,7 +149,7 @@ public class Knight {
                 }
                 else if(piece_name == PieceType.BN)
                 {
-                    if((rp.pieceType.toString().startsWith("W")) || (file == file_bound && rank == rank_bound))
+                    if((rp.pieceType.toString().startsWith("W")) && (file == file_bound && rank == rank_bound))
                     {
                         Chess.return_play.piecesOnBoard.remove(rp);
                         return true;
@@ -159,11 +160,38 @@ public class Knight {
         return false;
     }
 
-    public static boolean IsValidPosition(PieceFile file, int rank, PieceFile file_bound, int rank_bound)
+    private static boolean IsValidPosition(PieceType piece_type, PieceFile file, int rank, PieceFile file_bound, int rank_bound)
     {
         if(file_bound == null || rank_bound == 0)
         {
             return false;
+        }
+
+        if(piece_type == PieceType.WN)
+        {
+            for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
+            {
+                if(rp.pieceFile == file && rp.pieceRank == rank)
+                {
+                    if(rp.pieceType.toString().startsWith("W"))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        else if(piece_type == PieceType.WN)
+        {
+            for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
+            {
+                if(rp.pieceFile == file && rp.pieceRank == rank)
+                {
+                    if(rp.pieceType.toString().startsWith("B"))
+                    {
+                        return false;
+                    }
+                }
+            }
         }
 
         if(file == file_bound && rank == rank_bound)

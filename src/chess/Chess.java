@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
-import chess.ReturnPlay.Message;
 
 class ReturnPiece {
 	static enum PieceType {
@@ -115,7 +114,7 @@ public class Chess {
 
 					if (Pawn.CheckForPromotion(rp.pieceType, current_piece_rank)) 
 					{
-						if (move.length() == 4) 
+						if (move.length() == 5) 
 						{
 							rp.pieceType = PieceType.WQ;
 						} 
@@ -153,13 +152,10 @@ public class Chess {
 				{
 					return_play.message = Queen.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 				}
-			
-				if ((rp.pieceType == PieceType.WK && is_wk_moved == false)
-						|| (rp.pieceType == PieceType.BK && is_bk_moved == false)) {
-					if (Castling.isCastling(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file,
-							move_piece_rank, return_play.piecesOnBoard) == true) {
-					}
-				} 
+				else if(rp.pieceType == PieceType.WK || rp.pieceType == PieceType.BK)
+				{
+					return_play.message = King.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
+				}
 				if(return_play.message == null)
 				{
 					rp.pieceFile = move_piece_file;
@@ -169,7 +165,7 @@ public class Chess {
 			}
 		}
 
-		if (move.length() > 5 && move.substring(6, 11).equals("draw?")) {
+		if (move.length() == 11 && move.substring(6, 11).equals("draw?")) {
 			if (current_player == Player.white) 
 			{
 				return_play.message = ReturnPlay.Message.DRAW;

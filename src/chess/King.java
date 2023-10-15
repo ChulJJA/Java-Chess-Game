@@ -1,171 +1,210 @@
 package chess;
 
-import java.util.function.BiPredicate;
+import chess.ReturnPiece.PieceFile;
+import chess.ReturnPiece.PieceType;
+import chess.ReturnPlay.Message;
 
 public class King {
-	private boolean hasMoved = false;
+	private static boolean hasMoved = false;
 
-	public boolean validMove(char curCol, int curRow, char intCol, int intRow) {
-		char leftColBound = (char) ((Character.valueOf(curCol) - 97) - 1 + 97);
-		char rightColBound = (char) ((Character.valueOf(curCol) - 97) + 1 + 97);
+	public static Message IsMoveValid(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) 
+	{
+		if(Chess.PieceInBoard(mov_file, mov_rank) == false)
+		{
+			return Message.ILLEGAL_MOVE;
+		}
 
-		int topRowBound = curRow + 1;
-		int botRowBound = curRow - 1;
+		PieceFile left_file_bound = null;
+		PieceFile right_file_bound = null;
 
-		BiPredicate<Character, Integer> positionW = (c,
-				i) -> ((Chess.activeBoard.getCell(c, i).equals("##") || Chess.activeBoard.getCell(c, i).equals("  ")
-						|| Chess.activeBoard.getCell(c, i).contains("b")) && (intCol == c && intRow == i)
-						&& !ChessBoard.wK_Check[i][Character.valueOf(c) - 97]);
-		BiPredicate<Character, Integer> positionB = (c,
-				i) -> ((Chess.activeBoard.getCell(c, i).equals("##") || Chess.activeBoard.getCell(c, i).equals("  ")
-						|| Chess.activeBoard.getCell(c, i).contains("w")) && (intCol == c && intRow == i)
-						&& !ChessBoard.bK_Check[i][Character.valueOf(c) - 97]);
+		if(cur_file.ordinal() - 1 >= 0)
+		{
+			left_file_bound = PieceFile.values()[cur_file.ordinal() - 1];
+		}
+		if(cur_file.ordinal() + 1 <= 7)
+		{
+			right_file_bound = PieceFile.values()[cur_file.ordinal() + 1];
+		}
+		int top_rank_bound = cur_rank + 1;
+		int bot_rank_bound = cur_rank - 1;
 
-		if (validMoveWithRook(intCol, intRow)) {
+		if (IsCastling(mov_file, mov_rank))
+		{
 			hasMoved = true;
-			return true;
+			return null;
 		}
 
-		if (getChessPieceName().equals("wK")) {
-			if (positionW.test(leftColBound, topRowBound)) {
+		if (piece_type == PieceType.WK) 
+		{
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionW.test(leftColBound, curRow)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, cur_rank) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, cur_rank)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionW.test(leftColBound, botRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionW.test(curCol, topRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, top_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, cur_file, top_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionW.test(curCol, botRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionW.test(rightColBound, topRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionW.test(rightColBound, curRow)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, cur_rank) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, cur_rank)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionW.test(rightColBound, botRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-		} else if (getChessPieceName().equals("bK")) {
-			if (positionB.test(leftColBound, topRowBound)) {
+		} 
+		else if (piece_type == PieceType.BK) 
+		{
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionB.test(leftColBound, curRow)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, cur_rank) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, cur_rank)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionB.test(leftColBound, botRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionB.test(curCol, topRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, top_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, cur_file, top_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionB.test(curCol, botRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound))
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionB.test(rightColBound, topRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionB.test(rightColBound, curRow)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, cur_rank) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, cur_rank)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
-			if (positionB.test(rightColBound, botRowBound)) {
+			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound) || IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound)) 
+			{
 				hasMoved = true;
-				return true;
+				return null;
 			}
 		}
+		return Message.ILLEGAL_MOVE;
+	}
+
+	public static boolean IsCastling(PieceFile mov_file, int mov_rank) 
+	{
+		
 		return false;
 	}
 
-	public boolean validMoveWithRook(char intCol, int intRow) {
+	public static boolean IsAppropriatePiece(PieceType piece_name, PieceFile file, int rank, PieceFile file_bound, int rank_bound)
+    {
+        if(file_bound == null || rank_bound == 0)
+        {
+            return false;
+        }
 
-		BiPredicate<Character, Integer> positionW = (c,
-				i) -> ((Chess.activeBoard.getCell(c, i).equals("##") || Chess.activeBoard.getCell(c, i).equals("  "))
-						&& (intCol == c && intRow == i) && !ChessBoard.wK_Check[i][Character.valueOf(c) - 97]);
-		BiPredicate<Character, Integer> positionB = (c,
-				i) -> ((Chess.activeBoard.getCell(c, i).equals("##") || Chess.activeBoard.getCell(c, i).equals("  "))
-						&& (intCol == c && intRow == i) && !ChessBoard.bK_Check[i][Character.valueOf(c) - 97]);
+        for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
+        {
+            if(rp.pieceFile == file && rp.pieceRank == rank)
+            {
+                if(piece_name == PieceType.WK)
+                {
+                    if((rp.pieceType.toString().startsWith("B")) && (file == file_bound && rank == rank_bound))
+                    {
+                        Chess.return_play.piecesOnBoard.remove(rp);
+                        return true;
+                    }
+                }
+                else if(piece_name == PieceType.BK)
+                {
+                    if((rp.pieceType.toString().startsWith("W")) && (file == file_bound && rank == rank_bound))
+                    {
+                        Chess.return_play.piecesOnBoard.remove(rp);
+                        return true;
+                    }
+                }
+            }
+        }
+		
+        return false;
+    }
 
-		char c = getCol();
-		if (getChessPieceName().equals("wK") && getCol() > intCol) {
-			if (Chess.activeBoard.getChessPiece('a', 1) instanceof Rook) {
-				if (!hasMoved && !((Rook) Chess.activeBoard.getChessPiece('a', 1)).isHasMoved()) {
-					if (((Rook) Chess.activeBoard.getChessPiece('a', 1)).isPathClear('a', 1, getCol(), getRow())) {
-						--c;
-						if (positionW.test(--c, getRow())) {
-							Chess.activeBoard.getChessPiece('a', 1).setColRow(++c, 1);
-							Chess.activeBoard.initStateOfBoard();
-							return true;
-						}
-					}
-				}
-			}
-		}
-		if (getChessPieceName().equals("wK") && getCol() < intCol) {
-			if (Chess.activeBoard.getChessPiece('h', 1) instanceof Rook) {
-				if (!hasMoved && !((Rook) Chess.activeBoard.getChessPiece('h', 1)).isHasMoved()) {
-					if (((Rook) Chess.activeBoard.getChessPiece('h', 1)).isPathClear('h', 1, getCol(), getRow())) {
-						++c;
-						if (positionW.test(++c, getRow())) {
-							Chess.activeBoard.getChessPiece('h', 1).setColRow(--c, 1);
-							Chess.activeBoard.initStateOfBoard();
-							return true;
-						}
-					}
-				}
-			}
-		}
-		if (getChessPieceName().equals("bK") && getCol() > intCol) {
-			if (Chess.activeBoard.getChessPiece('a', 8) instanceof Rook) {
-				if (!hasMoved && !((Rook) Chess.activeBoard.getChessPiece('a', 8)).isHasMoved()) {
-					if (((Rook) Chess.activeBoard.getChessPiece('a', 8)).isPathClear('a', 8, getCol(), getRow())) {
-						--c;
-						if (positionB.test(--c, getRow())) {
-							Chess.activeBoard.getChessPiece('a', 8).setColRow(++c, 8);
-							Chess.activeBoard.initStateOfBoard();
-							return true;
-						}
-					}
-				}
-			}
-		}
-		if (getChessPieceName().equals("bK") && getCol() < intCol) {
-			if (Chess.activeBoard.getChessPiece('h', 8) instanceof Rook) {
-				if (!hasMoved && !((Rook) Chess.activeBoard.getChessPiece('h', 8)).isHasMoved()) {
-					if (((Rook) Chess.activeBoard.getChessPiece('h', 8)).isPathClear('h', 8, getCol(), getRow())) {
-						++c;
-						if (positionB.test(++c, getRow())) {
-							Chess.activeBoard.getChessPiece('h', 8).setColRow(--c, 8);
-							Chess.activeBoard.initStateOfBoard();
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
+	private static boolean IsValidPosition(PieceType piece_type, PieceFile file, int rank, PieceFile file_bound, int rank_bound)
+    {
+        if(file_bound == null || rank_bound == 0)
+        {
+            return false;
+        }
 
-	public boolean isHasMoved() 
+		if(piece_type == PieceType.WK)
+        {
+            for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
+            {
+                if(rp.pieceFile == file && rp.pieceRank == rank)
+                {
+                    if(rp.pieceType.toString().startsWith("W"))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        else if(piece_type == PieceType.WK)
+        {
+            for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
+            {
+                if(rp.pieceFile == file && rp.pieceRank == rank)
+                {
+                    if(rp.pieceType.toString().startsWith("B"))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if(file == file_bound && rank == rank_bound)
+        {
+            return true;
+        }
+
+        return false;
+    }
+	
+	public static boolean isHasMoved() 
     {
 		return hasMoved;
 	}
