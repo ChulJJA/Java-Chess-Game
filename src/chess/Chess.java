@@ -72,6 +72,8 @@ public class Chess {
 	static ArrayList<PieceType> black_peices = new ArrayList<PieceType>();
 
 	static boolean enPassant = false;
+	static boolean is_wk_checked = false;
+	static boolean is_bk_checked = false;
 
 	/**
 	 * Plays the next move for whichever player has the turn.
@@ -101,6 +103,7 @@ public class Chess {
 			} else {
 				return_play.message = ReturnPlay.Message.RESIGN_WHITE_WINS;
 			}
+			start();
 			return return_play;
 		}
 
@@ -115,26 +118,43 @@ public class Chess {
 						|| (current_player == Player.black && rp.pieceType == PieceType.BP)) {
 					return_play.message = Pawn.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank,
 							move_piece_file, move_piece_rank, enPassant);
-
+					if (return_play.message == null) {
+						IsCheck(rp.pieceType, current_player, current_piece_file, current_piece_rank, move_piece_file,
+								move_piece_rank);
+					}
 					if (return_play.message == null && (current_piece_rank - move_piece_rank == 2
 							|| current_piece_rank - move_piece_rank == -2)) {
 						enPassant = true;
 					} else {
 						enPassant = false;
 					}
-
-					if (Pawn.CheckForPromotion(rp.pieceType, current_piece_rank)) {
-						if (move.length() == 5) {
-							rp.pieceType = PieceType.WQ;
-						} else if (move.charAt(6) == 'N') {
-							rp.pieceType = PieceType.WN;
-						} else if (move.charAt(6) == 'B') {
-							rp.pieceType = PieceType.WB;
-						} else if (move.charAt(6) == 'R') {
-							rp.pieceType = PieceType.WR;
-						} else if (move.charAt(6) == 'Q') {
-							rp.pieceType = PieceType.WQ;
+					if (Pawn.CheckForPromotion(rp.pieceType, move_piece_rank)) {
+						if (current_player == Player.white) {
+							if (move.length() == 5) {
+								rp.pieceType = PieceType.WQ;
+							} else if (move.charAt(6) == 'N') {
+								rp.pieceType = PieceType.WN;
+							} else if (move.charAt(6) == 'B') {
+								rp.pieceType = PieceType.WB;
+							} else if (move.charAt(6) == 'R') {
+								rp.pieceType = PieceType.WR;
+							} else if (move.charAt(6) == 'Q') {
+								rp.pieceType = PieceType.WQ;
+							}
+						} else if (current_player == Player.black) {
+							if (move.length() == 5) {
+								rp.pieceType = PieceType.BQ;
+							} else if (move.charAt(6) == 'N') {
+								rp.pieceType = PieceType.BN;
+							} else if (move.charAt(6) == 'B') {
+								rp.pieceType = PieceType.BB;
+							} else if (move.charAt(6) == 'R') {
+								rp.pieceType = PieceType.BR;
+							} else if (move.charAt(6) == 'Q') {
+								rp.pieceType = PieceType.BQ;
+							}
 						}
+
 					}
 				} else if ((current_player == Player.white && rp.pieceType == PieceType.WB)
 						|| (current_player == Player.black && rp.pieceType == PieceType.BB)) {
@@ -142,6 +162,8 @@ public class Chess {
 							move_piece_file, move_piece_rank);
 					if (return_play.message == null) {
 						enPassant = false;
+						IsCheck(rp.pieceType, current_player, current_piece_file, current_piece_rank, move_piece_file,
+								move_piece_rank);
 					}
 				} else if ((current_player == Player.white && rp.pieceType == PieceType.WR)
 						|| (current_player == Player.black && rp.pieceType == PieceType.BR)) {
@@ -149,6 +171,8 @@ public class Chess {
 							move_piece_file, move_piece_rank);
 					if (return_play.message == null) {
 						enPassant = false;
+						IsCheck(rp.pieceType, current_player, current_piece_file, current_piece_rank, move_piece_file,
+								move_piece_rank);
 					}
 				} else if ((current_player == Player.white && rp.pieceType == PieceType.WN)
 						|| (current_player == Player.black && rp.pieceType == PieceType.BN)) {
@@ -156,6 +180,8 @@ public class Chess {
 							move_piece_file, move_piece_rank);
 					if (return_play.message == null) {
 						enPassant = false;
+						IsCheck(rp.pieceType, current_player, current_piece_file, current_piece_rank, move_piece_file,
+								move_piece_rank);
 					}
 				} else if ((current_player == Player.white && rp.pieceType == PieceType.WQ)
 						|| (current_player == Player.black && rp.pieceType == PieceType.BQ)) {
@@ -163,6 +189,8 @@ public class Chess {
 							move_piece_file, move_piece_rank);
 					if (return_play.message == null) {
 						enPassant = false;
+						IsCheck(rp.pieceType, current_player, current_piece_file, current_piece_rank, move_piece_file,
+								move_piece_rank);
 					}
 				} else if ((current_player == Player.white && rp.pieceType == PieceType.WK)
 						|| (current_player == Player.black && rp.pieceType == PieceType.BK)) {
@@ -175,6 +203,8 @@ public class Chess {
 					}
 					if (return_play.message == null) {
 						enPassant = false;
+						IsCheck(rp.pieceType, current_player, current_piece_file, current_piece_rank, move_piece_file,
+								move_piece_rank);
 					}
 				}
 				if (return_play.message == null && isCastling == false) {
@@ -193,9 +223,24 @@ public class Chess {
 			} else {
 				return_play.message = ReturnPlay.Message.DRAW;
 			}
+			start();
+			return return_play;
+		} else if (move.length() == 13 && move.substring(8, 13).equals("draw?")) {
+			if (current_player == Player.white) {
+				return_play.message = ReturnPlay.Message.DRAW;
+			} else {
+				return_play.message = ReturnPlay.Message.DRAW;
+			}
+			start();
 			return return_play;
 		}
-
+		if (is_bk_checked && current_player == Player.white) {
+			is_bk_checked = false;
+			return_play.message = ReturnPlay.Message.CHECK;
+		} else if (is_wk_checked && current_player == Player.black) {
+			is_wk_checked = false;
+			return_play.message = ReturnPlay.Message.CHECK;
+		}
 		if (current_player == Player.white && return_play.message != ReturnPlay.Message.ILLEGAL_MOVE) {
 			current_player = Player.black;
 		} else if (current_player == Player.black && return_play.message != ReturnPlay.Message.ILLEGAL_MOVE) {
@@ -400,5 +445,65 @@ public class Chess {
 			return false;
 		}
 		return true;
+	}
+
+	public static boolean IsCheck(PieceType piece_type, Player cur_player, PieceFile cur_file, int cur_rank,
+			PieceFile mov_file, int mov_rank) {
+		ReturnPlay.Message msg = ReturnPlay.Message.ILLEGAL_MOVE;
+
+		if (cur_player == Player.white) {
+			ReturnPiece tmp_BK = null;
+			for (ReturnPiece rp : return_play.piecesOnBoard) {
+				if (rp.pieceType == PieceType.BK) {
+					tmp_BK = rp;
+					break;
+				}
+			}
+			if (piece_type == PieceType.WP) {
+				msg = Pawn.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_BK.pieceFile, tmp_BK.pieceRank);
+			} else if (piece_type == PieceType.WB) {
+				msg = Bishop.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_BK.pieceFile, tmp_BK.pieceRank);
+			} else if (piece_type == PieceType.WR) {
+				msg = Rook.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_BK.pieceFile, tmp_BK.pieceRank);
+			} else if (piece_type == PieceType.WN) {
+				msg = Knight.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_BK.pieceFile, tmp_BK.pieceRank);
+			} else if (piece_type == PieceType.WQ) {
+				msg = Queen.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_BK.pieceFile, tmp_BK.pieceRank);
+			} else if (piece_type == PieceType.WK) {
+				msg = King.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_BK.pieceFile, tmp_BK.pieceRank);
+			}
+		} else if (cur_player == Player.black) {
+			ReturnPiece tmp_WK = null;
+			for (ReturnPiece rp : return_play.piecesOnBoard) {
+				if (rp.pieceType == PieceType.WK) {
+					tmp_WK = rp;
+					break;
+				}
+			}
+			if (piece_type == PieceType.BP) {
+				msg = Pawn.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank,
+						enPassant);
+			} else if (piece_type == PieceType.BB) {
+				msg = Bishop.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank);
+			} else if (piece_type == PieceType.BR) {
+				msg = Rook.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank);
+			} else if (piece_type == PieceType.BN) {
+				msg = Knight.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank);
+			} else if (piece_type == PieceType.BQ) {
+				msg = Queen.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank);
+			} else if (piece_type == PieceType.BK) {
+				msg = King.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank);
+			}
+		}
+
+		if (msg == null && current_player == Player.white) {
+			is_bk_checked = true;
+			return true;
+		} else if (msg == null && current_player == Player.black) {
+			is_wk_checked = true;
+			return true;
+		}
+
+		return false;
 	}
 }
