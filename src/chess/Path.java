@@ -77,11 +77,13 @@ public class Path {
 		return false;
 	}
 
-	static boolean IsPathClearCheck(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
+	static boolean IsPathClearCheck(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file,
+			int mov_rank) {
 		int cur_file_val = cur_file.ordinal();
 		int mov_file_val = mov_file.ordinal();
 
-		if (piece_type == PieceType.WR || piece_type == PieceType.BR || piece_type == PieceType.WQ || piece_type == PieceType.BQ) {
+		if (piece_type == PieceType.WR || piece_type == PieceType.BR || piece_type == PieceType.WQ
+				|| piece_type == PieceType.BQ) {
 			if (cur_file == mov_file) {
 				if (mov_rank < cur_rank) {
 					for (int i = cur_rank - 1; i > mov_rank; i--) {
@@ -116,7 +118,7 @@ public class Path {
 			}
 		}
 		if (piece_type == PieceType.WB || piece_type == PieceType.WQ || piece_type == PieceType.BB
-						|| piece_type == PieceType.BQ) {
+				|| piece_type == PieceType.BQ) {
 			if (IsDiagonal(cur_file, cur_rank, mov_file, mov_rank)) {
 				if (mov_file_val < cur_file_val && mov_rank > cur_rank) {
 					for (int i = cur_rank + 1; i < mov_rank; i++) {

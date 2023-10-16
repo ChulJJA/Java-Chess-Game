@@ -116,7 +116,7 @@ public class Knight {
         return Message.ILLEGAL_MOVE;
     }
 
-public static Message IsMoveValidCheck(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file,
+    public static Message IsMoveValidCheck(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file,
             int mov_rank) {
         if (Chess.PieceInBoard(mov_file, mov_rank) == false) {
             return Message.ILLEGAL_MOVE;
@@ -226,7 +226,7 @@ public static Message IsMoveValidCheck(PieceType piece_type, PieceFile cur_file,
 
         return Message.ILLEGAL_MOVE;
     }
-    
+
     public static boolean IsAppropriatePiece(PieceType piece_name, PieceFile file, int rank, PieceFile file_bound,
             int rank_bound) {
         if (file_bound == null || rank_bound == 0) {

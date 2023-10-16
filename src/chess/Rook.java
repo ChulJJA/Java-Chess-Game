@@ -46,4 +46,5 @@ public class Rook {
             return null;
         }
         return Message.ILLEGAL_MOVE;
-    }}
+    }
+}
