@@ -94,7 +94,7 @@ public class Chess {
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
 		return_play.message = ReturnPlay.Message.ILLEGAL_MOVE;
 
-		if (move.length() < 4 || move.length() > 13 || (move.charAt(0) < 'a' || move.charAt(0) > 'h') || (move.charAt(3) < 1 || move.charAt(3) > 8)) {
+		if (move.length() < 4 || move.length() > 13 || move.charAt(0) < 'a' || move.charAt(0) > 'h' || move.charAt(3) < 'a' || move.charAt(3) > 'h' || move.charAt(1) < '1' || move.charAt(1) > '8' || move.charAt(4) < '1' || move.charAt(4) > '8') {
 			return return_play;
 		}
 
@@ -104,7 +104,6 @@ public class Chess {
 			} else {
 				return_play.message = ReturnPlay.Message.RESIGN_WHITE_WINS;
 			}
-			start();
 			return return_play;
 		}
 
@@ -225,7 +224,6 @@ public class Chess {
 			} else {
 				return_play.message = ReturnPlay.Message.DRAW;
 			}
-			start();
 			return return_play;
 		} else if (move.length() == 13 && move.substring(8, 13).equals("draw?")) {
 			if (current_player == Player.white) {
@@ -233,7 +231,6 @@ public class Chess {
 			} else {
 				return_play.message = ReturnPlay.Message.DRAW;
 			}
-			start();
 			return return_play;
 		}
 		if (is_bk_checked && current_player == Player.white) {
@@ -241,7 +238,6 @@ public class Chess {
 			IsCheckmate(PieceType.BK, current_player, move_piece_file, move_piece_rank);
 			if (is_bk_checkmate == true) {
 				return_play.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
-				start();
 			} else {
 				return_play.message = ReturnPlay.Message.CHECK;
 			}
@@ -250,7 +246,6 @@ public class Chess {
 			IsCheckmate(PieceType.BK, current_player, move_piece_file, move_piece_rank);
 			if (is_wk_checkmate == true) {
 				return_play.message = ReturnPlay.Message.CHECKMATE_BLACK_WINS;
-				start();
 			} else {
 				return_play.message = ReturnPlay.Message.CHECK;
 			}
