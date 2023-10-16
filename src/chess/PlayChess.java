@@ -1,3 +1,8 @@
+/* 
+ * author: Chul Seung Lee
+ *
+ */
+
 package chess;
 
 import java.util.ArrayList;

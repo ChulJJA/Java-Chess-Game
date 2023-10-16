@@ -165,7 +165,7 @@ public class Chess {
 						enPassant = false;
 					}
 				}
-				else if((current_player == Player.white && rp.pieceType == PieceType.WK) || (current_player == Player.black && rp.pieceType == PieceType.BK))
+				else if((current_player == Player.white && rp.pieceType == PieceType.WN) || (current_player == Player.black && rp.pieceType == PieceType.BN))
 				{
 					return_play.message = Knight.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 					if(return_play.message == null)
