@@ -338,86 +338,86 @@ public class King {
         return false;
     }
 
-	public static boolean isKingInCheck(PieceType kingPieceType) {
-		ReturnPiece king = null;
+// 	public static boolean isKingInCheck(PieceType kingPieceType) {
+// 		ReturnPiece king = null;
 	
-		// Find the king's position
-		for (ReturnPiece piece : Chess.return_play.piecesOnBoard) {
-			if (piece.pieceType == kingPieceType) {
-				king = piece;
-				break;
-			}
-		}
+// 		// Find the king's position
+// 		for (ReturnPiece piece : Chess.return_play.piecesOnBoard) {
+// 			if (piece.pieceType == kingPieceType) {
+// 				king = piece;
+// 				break;
+// 			}
+// 		}
 	
-		if (king == null) return false; 
+// 		if (king == null) return false; 
 	
-		for (ReturnPiece piece : Chess.return_play.piecesOnBoard) {
-			if ((kingPieceType == PieceType.WK && piece.pieceType.toString().startsWith("B")) ||
-				(kingPieceType == PieceType.BK && piece.pieceType.toString().startsWith("W"))) {
-				if (isValidMoveWithoutMaking(piece, king.pieceFile, king.pieceRank)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+// 		for (ReturnPiece piece : Chess.return_play.piecesOnBoard) {
+// 			if ((kingPieceType == PieceType.WK && piece.pieceType.toString().startsWith("B")) ||
+// 				(kingPieceType == PieceType.BK && piece.pieceType.toString().startsWith("W"))) {
+// 				if (isValidMoveWithoutMaking(piece, king.pieceFile, king.pieceRank)) {
+// 					return true;
+// 				}
+// 			}
+// 		}
+// 		return false;
+// 	}
 
-	public static boolean isKingInCheckmate(PieceType kingType, PieceFile kingFile, int kingRank) {
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) continue; // current pos doesnt count
+// 	public static boolean isKingInCheckmate(PieceType kingType, PieceFile kingFile, int kingRank) {
+//         for (int i = -1; i <= 1; i++) {
+//             for (int j = -1; j <= 1; j++) {
+//                 if (i == 0 && j == 0) continue; // current pos doesnt count
 
-                PieceFile targetFile = PieceFile.values()[kingFile.ordinal() + i];
-                int targetRank = kingRank + j;
+//                 PieceFile targetFile = PieceFile.values()[kingFile.ordinal() + i];
+//                 int targetRank = kingRank + j;
 
-                // checks if move is within board boundaries
-                if (targetFile.ordinal() >= 0 && targetFile.ordinal() < 8 && targetRank >= 1 && targetRank <= 8) {
-                    if (isValidMoveWithoutMaking(kingType, kingFile, kingRank, targetFile, targetRank)) {
-                        return false; 
-                    }
-                }
-            }
-        }
+//                 // checks if move is within board boundaries
+//                 if (targetFile.ordinal() >= 0 && targetFile.ordinal() < 8 && targetRank >= 1 && targetRank <= 8) {
+//                     if (isValidMoveWithoutMaking(kingType, kingFile, kingRank, targetFile, targetRank)) {
+//                         return false; 
+//                     }
+//                 }
+//             }
+//         }
 
-        return true;
-    }
+//         return true;
+//     }
 
-	public static boolean isValidMoveWithoutMaking(ReturnPiece piece, PieceFile file, int rank) {
-		switch (piece.pieceType) {
-			case WK:
-			case BK:
-				return King.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
-			case WQ:
-			case BQ:
-				return Queen.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
-			case WR:
-			case BR:
-				return Rook.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
-			case WN:
-			case BN:
-				return Knight.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
-			case WB:
-			case BB:
-				return Bishop.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
-			case WP:
-			case BP:
-				return Pawn.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
-			default:
-				return false;
-		}
-	}
+// 	public static boolean isValidMoveWithoutMaking(ReturnPiece piece, PieceFile file, int rank) {
+// 		switch (piece.pieceType) {
+// 			case WK:
+// 			case BK:
+// 				return King.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
+// 			case WQ:
+// 			case BQ:
+// 				return Queen.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
+// 			case WR:
+// 			case BR:
+// 				return Rook.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
+// 			case WN:
+// 			case BN:
+// 				return Knight.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
+// 			case WB:
+// 			case BB:
+// 				return Bishop.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
+// 			case WP:
+// 			case BP:
+// 				return Pawn.IsMoveValid(piece.pieceType, piece.pieceFile, piece.pieceRank, file, rank) == null;
+// 			default:
+// 				return false;
+// 		}
+// 	}
 
-	private static boolean isKingInCheckAfterMove(ReturnPiece piece, Move move) 
-	{
-    ArrayList<ReturnPiece> backup = new ArrayList<>(Chess.return_play.piecesOnBoard);
+// 	private static boolean isKingInCheckAfterMove(ReturnPiece piece, Move move) 
+// 	{
+//     ArrayList<ReturnPiece> backup = new ArrayList<>(Chess.return_play.piecesOnBoard);
 
-    Chess.play(move.toString());
+//     Chess.play(move.toString());
 
-    boolean isStillInCheck = isKingInCheck(piece.pieceType == PieceType.WK ? PieceType.BK : PieceType.WK);
+//     boolean isStillInCheck = isKingInCheck(piece.pieceType == PieceType.WK ? PieceType.BK : PieceType.WK);
 
-    Chess.return_play.piecesOnBoard = backup;
+//     Chess.return_play.piecesOnBoard = backup;
 
-    return isStillInCheck;
-	// creates backup board, checks if move creates check state, returns value after restoring board
-}
+//     return isStillInCheck;
+// 	// creates backup board, checks if move creates check state, returns value after restoring board
+// }
 }
