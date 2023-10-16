@@ -6,10 +6,7 @@ import chess.ReturnPlay.Message;
 
 
 public class Pawn {
-	private boolean enPassant = false;
-	private int numOfEnPassantTurns = 0;
-
-	public static Message IsMoveValid(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) 
+	public static Message IsMoveValid(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank, boolean enPassant) 
 	{
 		if(Chess.PieceInBoard(mov_file, mov_rank) == false)
 		{
@@ -29,6 +26,15 @@ public class Pawn {
 		}
 		int top_rank_bound = cur_rank + 1;
 		int bottom_rank_bound = cur_rank - 1;
+
+		if(enPassant && IsEnPassant(piece_type, cur_file, cur_rank, mov_file, mov_rank))
+		{
+			return null;
+		}
+		if(Chess.enPassant == true)
+		{
+			Chess.enPassant = false;
+		}
 
 		if (piece_type == PieceType.WP) 
 		{
@@ -126,23 +132,36 @@ public class Pawn {
 		return false;
 	}
 
-	public boolean IsEnPassant() 
+	private static boolean IsEnPassant(PieceType piece_type, PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank)
 	{
-		return enPassant;
-	}
-
-	public void setEnPassant(boolean enPassant) 
-	{
-		this.enPassant = enPassant;
-	}
-
-	public int getNumOfEnPassantTurns() 
-	{
-		return numOfEnPassantTurns;
-	}
-
-	public void incrementEnPassantTurns() 
-	{
-		numOfEnPassantTurns++;
+		if(cur_rank == 5)
+		{
+			if(piece_type == PieceType.WP)
+			{
+				for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
+				{
+					if(rp.pieceType == PieceType.BP && rp.pieceFile == mov_file && rp.pieceRank == mov_rank - 1)
+					{
+							Chess.return_play.piecesOnBoard.remove(rp);
+							return true;
+					}
+				}
+			}
+		}
+		else if(cur_rank == 4)
+		{
+			if(piece_type == PieceType.BP)
+			{
+				for(ReturnPiece rp : Chess.return_play.piecesOnBoard)
+				{
+					if(rp.pieceType == PieceType.WP && rp.pieceFile == mov_file && rp.pieceRank == mov_rank + 1)
+					{
+						Chess.return_play.piecesOnBoard.remove(rp);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
