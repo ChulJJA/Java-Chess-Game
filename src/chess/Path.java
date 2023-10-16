@@ -79,10 +79,10 @@ public class Path {
 
 	private static boolean IsDiagonal(PieceFile cur_file, int cur_rank, PieceFile mov_file, int mov_rank) {
 		int file_dist;
-        int rank_dist;
+		int rank_dist;
 		int cur_file_val = cur_file.ordinal();
 		int mov_file_val = mov_file.ordinal();
-        
+
 		if (mov_file_val < cur_file_val && mov_rank > cur_rank) {
 			rank_dist = mov_rank - cur_rank;
 			file_dist = cur_file_val - mov_file_val;
@@ -113,57 +113,47 @@ public class Path {
 		return false;
 	}
 
-    public static boolean IsVacant(PieceFile file, int rank)
-    {
-        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
-        {
-            if(rp.pieceFile == file && rp.pieceRank == rank)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    private static boolean IsRookOrQueen(PieceFile file, int rank)
-    {
-        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
-        {
-            if(rp.pieceFile == file && rp.pieceRank == rank)
-            {
-                if(rp.pieceType == PieceType.WR || rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BR || rp.pieceType == PieceType.BQ)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    private static boolean IsBishopOrQueen(PieceFile file, int rank)
-    {
-        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
-        {
-            if(rp.pieceFile == file && rp.pieceRank == rank)
-            {
-                if(rp.pieceType == PieceType.WB || rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BB || rp.pieceType == PieceType.BQ)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-	private static boolean IsKingCastling(PieceFile file, int rank)
-	{
-        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
-        {
-            if(rp.pieceFile == file && rp.pieceRank == rank)
-            {
-                if(rp.pieceType == PieceType.WK || rp.pieceType == PieceType.BK)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+	public static boolean IsVacant(PieceFile file, int rank) {
+		for (ReturnPiece rp : Chess.return_play.piecesOnBoard) {
+			if (rp.pieceFile == file && rp.pieceRank == rank) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean IsRookOrQueen(PieceFile file, int rank) {
+		for (ReturnPiece rp : Chess.return_play.piecesOnBoard) {
+			if (rp.pieceFile == file && rp.pieceRank == rank) {
+				if (rp.pieceType == PieceType.WR || rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BR
+						|| rp.pieceType == PieceType.BQ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean IsBishopOrQueen(PieceFile file, int rank) {
+		for (ReturnPiece rp : Chess.return_play.piecesOnBoard) {
+			if (rp.pieceFile == file && rp.pieceRank == rank) {
+				if (rp.pieceType == PieceType.WB || rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BB
+						|| rp.pieceType == PieceType.BQ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean IsKingCastling(PieceFile file, int rank) {
+		for (ReturnPiece rp : Chess.return_play.piecesOnBoard) {
+			if (rp.pieceFile == file && rp.pieceRank == rank) {
+				if (rp.pieceType == PieceType.WK || rp.pieceType == PieceType.BK) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
