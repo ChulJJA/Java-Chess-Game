@@ -8,7 +8,7 @@ public class Path {
 		int cur_file_val = cur_file.ordinal();
 		int mov_file_val = mov_file.ordinal();
 
-		if (IsRookOrQueen(cur_file, cur_rank)) {
+		if (IsRookOrQueen(cur_file, cur_rank) || IsKingCastling(cur_file, cur_rank)) {
 			if (cur_file == mov_file) {
 				if (mov_rank < cur_rank) {
 					for (int i = cur_rank - 1; i > mov_rank; i--) {
@@ -152,4 +152,18 @@ public class Path {
         }
         return false;
     }
+	private static boolean IsKingCastling(PieceFile file, int rank)
+	{
+        for(ReturnPiece rp : Chess.return_play.piecesOnBoard )
+        {
+            if(rp.pieceFile == file && rp.pieceRank == rank)
+            {
+                if(rp.pieceType == PieceType.WK || rp.pieceType == PieceType.BK)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+	}
 }

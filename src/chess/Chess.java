@@ -57,10 +57,11 @@ public class Chess {
 
 	static boolean is_wk_moved = false;
 	static boolean is_bk_moved = false;
-	static boolean is_wr1_moved = false;
-	static boolean is_wr2_moved = false;
-	static boolean is_br1_moved = false;
-	static boolean is_br2_moved = false;
+	static boolean is_lwr_moved = false;
+	static boolean is_rwr_moved = false;
+	static boolean is_lbr_moved = false;
+	static boolean is_rbr_moved = false;
+	static boolean isCastling = false;
 
 	static ArrayList<PieceType> white_pieces = new ArrayList<PieceType>();
 	static ArrayList<PieceType> black_peices = new ArrayList<PieceType>();
@@ -117,7 +118,7 @@ public class Chess {
 						if (move.length() == 5) 
 						{
 							rp.pieceType = PieceType.WQ;
-						} 
+						}
 						else if (move.charAt(6) == 'N') 
 						{
 							rp.pieceType = PieceType.WN;
@@ -155,12 +156,24 @@ public class Chess {
 				else if(rp.pieceType == PieceType.WK || rp.pieceType == PieceType.BK)
 				{
 					return_play.message = King.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
+					if(rp.pieceType == PieceType.WK)
+					{
+						is_wk_moved = true;
+					}
+					else if(rp.pieceType == PieceType.BK)
+					{
+						is_bk_moved = true;
+					}
 				}
-				if(return_play.message == null)
+				if(return_play.message == null && isCastling == false)
 				{
 					rp.pieceFile = move_piece_file;
 					rp.pieceRank = move_piece_rank;
 					break;				
+				}
+				else if(isCastling == true)
+				{
+					isCastling = false;
 				}
 			}
 		}
