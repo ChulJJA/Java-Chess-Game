@@ -112,7 +112,7 @@ public class Chess {
 		{
 			if (rp.pieceFile == current_piece_file && rp.pieceRank == current_piece_rank) 
 			{
-				if(rp.pieceType == PieceType.WP || rp.pieceType == PieceType.BP)
+				if((current_player == Player.white && rp.pieceType == PieceType.WP) || (current_player == Player.black && rp.pieceType == PieceType.BP))
 				{
 					return_play.message = Pawn.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank, enPassant);
 
@@ -149,7 +149,7 @@ public class Chess {
 						}
 					}
 				}
-				else if(rp.pieceType == PieceType.WB || rp.pieceType == PieceType.BB)
+				else if((current_player == Player.white && rp.pieceType == PieceType.WB) || (current_player == Player.black && rp.pieceType == PieceType.BB))
 				{
 					return_play.message = Bishop.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 					if(return_play.message == null)
@@ -157,7 +157,7 @@ public class Chess {
 						enPassant = false;
 					}
 				}
-				else if(rp.pieceType == PieceType.WR || rp.pieceType == PieceType.BR)
+				else if((current_player == Player.white && rp.pieceType == PieceType.WR) || (current_player == Player.black && rp.pieceType == PieceType.BR))
 				{
 					return_play.message = Rook.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 					if(return_play.message == null)
@@ -165,7 +165,7 @@ public class Chess {
 						enPassant = false;
 					}
 				}
-				else if(rp.pieceType == PieceType.WN || rp.pieceType == PieceType.BN)
+				else if((current_player == Player.white && rp.pieceType == PieceType.WK) || (current_player == Player.black && rp.pieceType == PieceType.BK))
 				{
 					return_play.message = Knight.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 					if(return_play.message == null)
@@ -173,14 +173,14 @@ public class Chess {
 						enPassant = false;
 					}
 				}
-				else if(rp.pieceType == PieceType.WQ || rp.pieceType == PieceType.BQ)
+				else if((current_player == Player.white && rp.pieceType == PieceType.WQ) || (current_player == Player.black && rp.pieceType == PieceType.BQ))
 				{
 					return_play.message = Queen.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 					if(return_play.message == null)
 					{
 						enPassant = false;
 					}				}
-				else if(rp.pieceType == PieceType.WK || rp.pieceType == PieceType.BK)
+				else if((current_player == Player.white && rp.pieceType == PieceType.WK) || (current_player == Player.black && rp.pieceType == PieceType.BK))
 				{
 					return_play.message = King.IsMoveValid(rp.pieceType, current_piece_file, current_piece_rank, move_piece_file, move_piece_rank);
 					if(rp.pieceType == PieceType.WK)
@@ -221,11 +221,11 @@ public class Chess {
 				return return_play;
 		}
 
-		if (current_player == Player.white) 
+		if (current_player == Player.white && return_play.message != ReturnPlay.Message.ILLEGAL_MOVE) 
 		{
 			current_player = Player.black;
 		} 
-		else 
+		else if(current_player == Player.black && return_play.message != ReturnPlay.Message.ILLEGAL_MOVE)
 		{
 			current_player = Player.white;
 		}
