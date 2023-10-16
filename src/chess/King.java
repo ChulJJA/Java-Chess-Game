@@ -1,7 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
-
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
 import chess.ReturnPlay.Message;
@@ -32,67 +30,115 @@ public class King {
 		if (piece_type == PieceType.WK) {
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, cur_rank)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, cur_rank)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, top_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, cur_file, top_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, cur_rank)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, cur_rank)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.black, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 		} else if (piece_type == PieceType.BK) {
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, top_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, cur_rank)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, cur_rank)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, left_file_bound, bot_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, top_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, cur_file, top_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, cur_file, bot_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, top_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, cur_rank)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, cur_rank)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 			if (IsAppropriatePiece(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound)
 					|| IsValidPosition(piece_type, mov_file, mov_rank, right_file_bound, bot_rank_bound)) {
+				if (Chess.IsCheck(piece_type, Chess.Player.white, cur_file, cur_rank, mov_file, mov_rank)) {
+					return Message.ILLEGAL_MOVE;
+				}
 				return null;
 			}
 		}
@@ -335,12 +381,10 @@ public class King {
 			if (rp.pieceFile == file && rp.pieceRank == rank) {
 				if (piece_name == PieceType.WK) {
 					if ((rp.pieceType.toString().startsWith("B")) && (file == file_bound && rank == rank_bound)) {
-						Chess.return_play.piecesOnBoard.remove(rp);
 						return true;
 					}
 				} else if (piece_name == PieceType.BK) {
 					if ((rp.pieceType.toString().startsWith("W")) && (file == file_bound && rank == rank_bound)) {
-						Chess.return_play.piecesOnBoard.remove(rp);
 						return true;
 					}
 				}
@@ -348,7 +392,8 @@ public class King {
 		}
 
 		return false;
-	}	
+	}
+
 	private static boolean IsValidPosition(PieceType piece_type, PieceFile file, int rank, PieceFile file_bound,
 			int rank_bound) {
 		if (file_bound == null || rank_bound == 0) {

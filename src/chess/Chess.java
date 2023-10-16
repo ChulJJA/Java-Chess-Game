@@ -60,6 +60,11 @@ public class Chess {
 	static ReturnPlay return_play = new ReturnPlay();
 	static Player current_player;
 
+
+
+	static ArrayList<PieceType> white_pieces = new ArrayList<PieceType>();
+	static ArrayList<PieceType> black_peices = new ArrayList<PieceType>();
+
 	static boolean is_wk_moved = false;
 	static boolean is_bk_moved = false;
 	static boolean is_lwr_moved = false;
@@ -67,13 +72,11 @@ public class Chess {
 	static boolean is_lbr_moved = false;
 	static boolean is_rbr_moved = false;
 	static boolean isCastling = false;
-
-	static ArrayList<PieceType> white_pieces = new ArrayList<PieceType>();
-	static ArrayList<PieceType> black_peices = new ArrayList<PieceType>();
-
 	static boolean enPassant = false;
 	static boolean is_wk_checked = false;
 	static boolean is_bk_checked = false;
+	static boolean is_wk_checkmate = false;
+	static boolean is_bk_checkmate = false;
 
 	/**
 	 * Plays the next move for whichever player has the turn.
@@ -236,10 +239,26 @@ public class Chess {
 		}
 		if (is_bk_checked && current_player == Player.white) {
 			is_bk_checked = false;
-			return_play.message = ReturnPlay.Message.CHECK;
+			IsCheckmate(PieceType.BK, current_player, move_piece_file, move_piece_rank);
+			if(is_bk_checkmate == true)
+			{
+				return_play.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+			}
+			else
+			{
+				return_play.message = ReturnPlay.Message.CHECK;
+			}
 		} else if (is_wk_checked && current_player == Player.black) {
 			is_wk_checked = false;
-			return_play.message = ReturnPlay.Message.CHECK;
+			IsCheckmate(PieceType.BK, current_player, move_piece_file, move_piece_rank);
+			if(is_wk_checkmate == true)
+			{
+				return_play.message = ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+			}
+			else
+			{
+				return_play.message = ReturnPlay.Message.CHECK;
+			}
 		}
 		if (current_player == Player.white && return_play.message != ReturnPlay.Message.ILLEGAL_MOVE) {
 			current_player = Player.black;
@@ -256,6 +275,18 @@ public class Chess {
 	public static void start() {
 		/* FILL IN THIS METHOD */
 		current_player = Player.white;
+		is_wk_moved = false;
+		is_bk_moved = false;
+		is_lwr_moved = false;
+		is_rwr_moved = false;
+		is_lbr_moved = false;
+		is_rbr_moved = false;
+		isCastling = false;
+		enPassant = false;
+		is_wk_checked = false;
+		is_bk_checked = false;
+		is_wk_checkmate = false;
+		is_bk_checkmate = false;
 		return_play.piecesOnBoard = new ArrayList<ReturnPiece>();
 		PieceDivder();
 
@@ -441,7 +472,7 @@ public class Chess {
 	}
 
 	public static boolean PieceInBoard(PieceFile mov_file, int mov_rank) {
-		if (mov_file.ordinal() < 0 || mov_file.ordinal() > 7 || mov_rank < 1 || mov_rank > 8) {
+		if (mov_file == null || mov_file.ordinal() < 0 || mov_file.ordinal() > 7 || mov_rank < 1 || mov_rank > 8) {
 			return false;
 		}
 		return true;
@@ -481,8 +512,7 @@ public class Chess {
 				}
 			}
 			if (piece_type == PieceType.BP) {
-				msg = Pawn.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank,
-						enPassant);
+				msg = Pawn.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank);
 			} else if (piece_type == PieceType.BB) {
 				msg = Bishop.IsMoveValidCheck(piece_type, mov_file, mov_rank, tmp_WK.pieceFile, tmp_WK.pieceRank);
 			} else if (piece_type == PieceType.BR) {
@@ -502,6 +532,79 @@ public class Chess {
 		} else if (msg == null && current_player == Player.black) {
 			is_wk_checked = true;
 			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean IsCheckmate(PieceType piece_type, Player cur_player, PieceFile cur_file, int cur_rank) {
+		PieceFile left_file_bound = null;
+		PieceFile right_file_bound = null;
+		ReturnPlay.Message is_checkmate = null;
+
+		if (cur_file.ordinal() - 1 >= 0) {
+			left_file_bound = PieceFile.values()[cur_file.ordinal() - 1];
+		}
+		if (cur_file.ordinal() + 1 <= 7) {
+			right_file_bound = PieceFile.values()[cur_file.ordinal() + 1];
+		}
+		int top_rank_bound = cur_rank - 1;
+		int bot_rank_bound = cur_rank + 1;
+
+		if (cur_player == Player.white) {		
+			ReturnPiece tmp_BK = null;
+			for (ReturnPiece rp : return_play.piecesOnBoard) {
+				if (rp.pieceType == PieceType.BK) {
+					tmp_BK = rp;
+					break;
+				}
+			}
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, tmp_BK.pieceFile, top_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, right_file_bound, top_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, right_file_bound, tmp_BK.pieceRank);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, right_file_bound, bot_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, tmp_BK.pieceFile, bot_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, left_file_bound, bot_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, left_file_bound, tmp_BK.pieceRank);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_BK.pieceFile, tmp_BK.pieceRank, left_file_bound, top_rank_bound);
+
+			if(is_checkmate == null)
+			{
+				return false;
+			}
+			else if(is_checkmate == ReturnPlay.Message.ILLEGAL_MOVE)
+			{
+				is_bk_checkmate = true;
+				return true;
+			}
+		}
+		else if(cur_player == Player.black)
+		{
+			ReturnPiece tmp_WK = null;
+			for (ReturnPiece rp : return_play.piecesOnBoard) {
+				if (rp.pieceType == PieceType.WK) {
+					tmp_WK = rp;
+					break;
+				}
+			}	
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, tmp_WK.pieceFile, top_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, right_file_bound, top_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, right_file_bound, tmp_WK.pieceRank);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, right_file_bound, bot_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, tmp_WK.pieceFile, bot_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, left_file_bound, bot_rank_bound);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, left_file_bound, tmp_WK.pieceRank);
+			is_checkmate = King.IsMoveValidCheck(piece_type, tmp_WK.pieceFile, tmp_WK.pieceRank, left_file_bound, top_rank_bound);
+
+			if(is_checkmate == null)
+			{
+				return false;
+			}
+			else if(is_checkmate == ReturnPlay.Message.ILLEGAL_MOVE)
+			{
+				is_wk_checkmate = true;
+				return true;
+			}
 		}
 
 		return false;
